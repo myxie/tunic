@@ -1,5 +1,6 @@
 #include <stdio.h> 
 #include <stdlib.h>
+#include <string.h>
 #include "ctest.h" 
 
 
@@ -16,7 +17,14 @@ char * another_assert(){
     ctest_assert("Error, another assertion failed", bar == 6);
 }
 
+char * array_assert(){
+    int foobar[] = {1,2,3,4,5};
+    int barfoo[] = {1,2,3,4,5};
+    ctest_assert("Error, array elements do not matc",(memcmp(foobar,barfoo, sizeof(foobar))==0)); 
+}
+
 char * run_tests() {
+    ctest_run_test(array_assert);
     ctest_run_test(simple_assert);
     ctest_run_test(another_assert);
     return 0;
