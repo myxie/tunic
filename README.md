@@ -1,1 +1,3 @@
-Testing framework for c programming - to be built upon as we go along on this journey
+Very bare bones testing functions for C programming.
+
+Compile with ctest.c and include ctest.h in your porgram to call the assert and reporting functions.  
