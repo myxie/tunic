@@ -1,19 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "ctest.h"
+#include "mtest.h"
 
-int tests_run, tests_passed = 0;
+int test_function(void);
+
+
+int test_function(void)
+{
+    return 1;
+}
 
 int main(){
     int x = 1;
     int y = 1; 
-    ctest_int_assert(TRUE, x, y);
-    
     int a[] = {1,2,3,4,5};
     int b[] = {1,2,3,4,5};
-    ctest_int_array_assert(TRUE, a, b);
+    
+    /*This call initialises the behind-the-scene counters that provide
+     test feedback to the user */
+    MTEST_INIT();
+    
+    MTEST_INT(TRUE, x, y);
 
-    ctest_report();
+    y = 2;
+    
+    MTEST_INT(TRUE, test_function(), y); //This should report as a fail 
+
+    MTEST_INT_ARRAY(TRUE, a, b);
+
+    MTEST_CLOSE();
 
     return 0;
 }
