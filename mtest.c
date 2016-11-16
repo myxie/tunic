@@ -1,11 +1,10 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "ctest.h" 
 
-int ctest_int_assert(bool val, int a, int b){
-    if((a==b && val) || (a !=b && !val)){
+int ctest_int_assert(int cond, int a, int b){
+    if(((a==b) && (cond == TRUE)) || ((a !=b) && (cond == FALSE) )){
         tests_passed++;
         return 0;
     }
@@ -16,11 +15,11 @@ int ctest_int_assert(bool val, int a, int b){
     tests_run++;
 }
 
-int ctest_int_array_assert(bool val, int *a, int *b){
-    if(((memcmp(a, b, sizeof(a)) == 0 ) && val) \
-            || ((memcmp(a, b, sizeof(a)) != 0) && !val)){
-        tests_passed++;
-        return 0;
+int ctest_int_array(int cond, int *a, int *b){
+    if(((memcmp(a, b, sizeof(a)) == 0 ) && (cond ==TRUE)) \
+        || ((memcmp(a, b, sizeof(a)) != 0) && (cond == FALSE))){
+         tests_passed++;
+         return 0;
     }
     else{
        return -1; 
