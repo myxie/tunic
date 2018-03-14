@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "mtest.h"
+
 
 int test_function(void);
 
@@ -20,11 +19,11 @@ int main(){
      test feedback to the user */
     MTEST_INIT();
     
-    MTEST_INT(TRUE, x, y);
+    MTEST_assert_int(TRUE, x, y);
 
     y = 2;
     
-    MTEST_INT(TRUE, test_function(), y); //This should report as a fail 
+    MTEST_assert_int(TRUE, test_function(), y); //This should report as a fail 
 
     MTEST_INT_ARRAY(TRUE, a, b);
 
