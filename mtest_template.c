@@ -1,7 +1,10 @@
+#define MTEST_LIBRARY
 #include "mtest.h"
 
-
-// int test_function(void);
+/*
+If you want to use timing functionalities for linux, use the following definition:
+*/
+#define TIME_TESTS
 
 
 int test_function(void){
@@ -21,8 +24,7 @@ void test_assert_array(void){
     int a[] = {1,2,3,4,5};
     int b[] = {1,2,3,4,5};
 
-    MTEST_INT_ARRAY(TRUE, a, b);
-
+    MTEST_int_array(TRUE, a, b);
 }
 
 
@@ -30,12 +32,12 @@ int main(){
     
     /*This call initialises the 'behind-the-scene' counters that provide
      test feedback to the user */
-    MTEST_INIT();
 
-    MTEST_run_test_suite(test_assert_function,BASIC_RESULTS);
-    // MTEST_run_test_suite()
+    MTEST_run_test_suite(test_assert_function,STD_OUTPUT);
 
-    MTEST_CLOSE();
+    // MTEST_INIT();
+    MTEST_run_test_suite(test_assert_array, STD_OUTPUT);
+    // MTEST_CLOSE();
 
     return 0;
 }
