@@ -7,10 +7,6 @@ If you want to use timing functionalities for linux, use the following definitio
 #define TIME_TESTS
 
 
-int test_function(void){
-    return 1;
-}
-
 void test_assert_function(void){
     int x = 1;
     int y = 1; 
@@ -30,14 +26,7 @@ void test_assert_array(void){
 
 int main(){
     
-    /*This call initialises the 'behind-the-scene' counters that provide
-     test feedback to the user */
-
     MTEST_run_test_suite(test_assert_function,STD_OUTPUT);
-
-    // MTEST_INIT();
     MTEST_run_test_suite(test_assert_array, STD_OUTPUT);
-    // MTEST_CLOSE();
-
     return 0;
 }
