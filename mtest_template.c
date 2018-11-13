@@ -6,8 +6,12 @@ If you want to use timing functionalities for linux, use the following definitio
 */
 #define TIME_TESTS
 
+//For use in test_assert_int()
+int test_function(void){
+    return 1;
+} 
 
-void test_assert_function(void){
+void test_assert_int(void){
     int x = 1;
     int y = 1; 
 
