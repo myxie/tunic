@@ -5,7 +5,8 @@
 
 #include <stdio.h> 
 #include <stdlib.h>
-#include <string.h> 
+#include <string.h>
+#include <math.h>
 /*
 	Define TIME_TESTS in your test file if you want
 	to use the timing functions
@@ -21,8 +22,18 @@
 	are helper functions within the header file. 
 */
 
+void MTEST_set_fAccuracy(float accuracy);
+
+void MTEST_set_dAccuracy(double accuracy);
+
+
 void MTEST_assert_int(int cond, int a, int b);
-void MTEST_int_array(int cond, int *a, int *b);
+
+void MTEST_int_array(int cond, const int *a, const int *b, size_t n);
+
+void MTEST_assert_float(int cond, float a, float b);
+
+void MTEST_float_array(int cond, const float *a, const float *b, size_t n);
 
 /*
 	PUBLIC VARIABLES FOR USER
@@ -52,6 +63,8 @@ enum MTEST_output_level{
 int test_status;
 int tests_run;
 int tests_passed;
+float mtest_fAccuracy = 1e-7;
+double mtest_dAccuracy = 1e-15;
 
 #ifdef TIME_TESTS
 clock_t start_t;
@@ -85,8 +98,8 @@ void mtest_close(void);
 } while (0)
 
 
-void MTEST_assert_int(int assert, int a, int b){
-    if(((a==b) && (assert == TRUE)) || ((a !=b) && (assert == FALSE) )){
+void MTEST_assert_int(int cond, int a, int b) {
+    if (((a == b) && (cond == TRUE)) || ((a != b) && (cond == FALSE))) {
         tests_passed++;
         test_status =  1;
     }    
@@ -96,16 +109,83 @@ void MTEST_assert_int(int assert, int a, int b){
     mtest_update_test_status(test_status);
 }
 
-void MTEST_int_array(int assert, int *a, int *b){
-    if(((memcmp(a, b, sizeof(&a)) == 0 ) && (assert ==TRUE)) \
-        || ((memcmp(a, b, sizeof(&a)) != 0) && (assert == FALSE))){
-         tests_passed++;
-         test_status = 1;
+void MTEST_int_array(int cond, const int *a, const int *b, size_t n) {
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if (a[i] != b[i]) {
+            result = 0;
+        }
     }
-    else{
-       test_status = 0; 
+    if ((result == 1 && cond == TRUE) || (result == 0 && cond == FALSE)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
     }
+    mtest_update_test_status(test_status);
+}
 
+void MTEST_set_fAccuracy(float accuracy) {
+    mtest_fAccuracy = accuracy;
+}
+
+void MTEST_set_dAccuracy(double accuracy) {
+    mtest_dAccuracy = accuracy;
+}
+
+void MTEST_assert_float(int cond, float a, float b) {
+    if (((fabsf(a - b) <= mtest_fAccuracy) && (cond == TRUE)) ||
+        ((fabsf(a - b) > mtest_fAccuracy) && (cond == FALSE))) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    mtest_update_test_status(test_status);
+}
+
+void MTEST_float_array(int cond, const float *a, const float *b, size_t n) {
+    //Moving away from memcmp test for floating point values
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if (fabsf(a[i] - b[i]) > mtest_fAccuracy) {
+            result = 0;
+        }
+    }
+    if ((result == 1 && cond == TRUE) || (result == 0 && cond == FALSE)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    mtest_update_test_status(test_status);
+}
+
+void MTEST_assert_double(int cond, double a, double b) {
+    if (((fabs(a - b) <= mtest_fAccuracy) && (cond == TRUE)) ||
+        ((fabs(a - b) > mtest_fAccuracy) && (cond == FALSE))) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    mtest_update_test_status(test_status);
+}
+
+void MTEST_double_array(int cond, const double *a, const double *b, size_t n) {
+    //Moving away from memcmp test for floating point values
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if (fabs(a[i] - b[i]) > mtest_fAccuracy) {
+            result = 0;
+        }
+    }
+    if ((result == 1 && cond == TRUE) || (result == 0 && cond == FALSE)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
     mtest_update_test_status(test_status);
 }
 
