@@ -109,6 +109,9 @@ void MTEST_assert_int(int cond, int a, int b) {
     mtest_update_test_status(test_status);
 }
 
+/** Moved to an element wise check because annoyingly, when passed to a function arrays become simple pointers
+ *  so it is impossible to query them for size.
+ */
 void MTEST_int_array(int cond, const int *a, const int *b, size_t n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
