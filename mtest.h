@@ -29,11 +29,11 @@ void MTEST_set_dAccuracy(double accuracy);
 
 void MTEST_assert_int(int cond, int a, int b);
 
-void MTEST_int_array(int cond, const int *a, const int *b, size_t n);
+void MTEST_int_array(int cond, const int *a, const int *b, unsigned long n);
 
 void MTEST_assert_float(int cond, float a, float b);
 
-void MTEST_float_array(int cond, const float *a, const float *b, size_t n);
+void MTEST_float_array(int cond, const float *a, const float *b, unsigned long n);
 
 /*
 	PUBLIC VARIABLES FOR USER
@@ -112,7 +112,7 @@ void MTEST_assert_int(int cond, int a, int b) {
 /** Moved to an element wise check because annoyingly, when passed to a function arrays become simple pointers
  *  so it is impossible to query them for size.
  */
-void MTEST_int_array(int cond, const int *a, const int *b, size_t n) {
+void MTEST_int_array(int cond, const int *a, const int *b, unsigned long n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
         if (a[i] != b[i]) {
@@ -147,7 +147,7 @@ void MTEST_assert_float(int cond, float a, float b) {
     mtest_update_test_status(test_status);
 }
 
-void MTEST_float_array(int cond, const float *a, const float *b, size_t n) {
+void MTEST_float_array(int cond, const float *a, const float *b, unsigned long n) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
@@ -175,7 +175,7 @@ void MTEST_assert_double(int cond, double a, double b) {
     mtest_update_test_status(test_status);
 }
 
-void MTEST_double_array(int cond, const double *a, const double *b, size_t n) {
+void MTEST_double_array(int cond, const double *a, const double *b, unsigned long n) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
