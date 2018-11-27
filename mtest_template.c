@@ -28,10 +28,10 @@ void test_assert_array_int(void) {
     int b[] = {1,2,3,4,5};
     int c[] = {1, 2, 3, 4, 4};
 
-    MTEST_int_array(TRUE, a, b, 5); // Pass
-    MTEST_int_array(TRUE, a, c, 5); // Fail
-    MTEST_int_array(FALSE, a, b, 5); // Fail
-    MTEST_int_array(FALSE, a, c, 5); // Pass
+    MTEST_assert_int_array(TRUE, a, b, 5); // Pass
+    MTEST_assert_int_array(TRUE, a, c, 5); // Fail
+    MTEST_assert_int_array(FALSE, a, b, 5); // Fail
+    MTEST_assert_int_array(FALSE, a, c, 5); // Pass
 }
 
 void test_assert_float(void) {
@@ -50,10 +50,10 @@ void test_assert_array_float(void) {
     float b[] = {0.0, 0.1, 0.2};
     float c[] = {0.0, 0.2, 0.2};
 
-    MTEST_float_array(TRUE, a, b, 3);
-    MTEST_float_array(TRUE, a, c, 3);
-    MTEST_float_array(FALSE, a, b, 3);
-    MTEST_float_array(FALSE, a, c, 3);
+    MTEST_assert_float_array(TRUE, a, b, 3);
+    MTEST_assert_float_array(TRUE, a, c, 3);
+    MTEST_assert_float_array(FALSE, a, b, 3);
+    MTEST_assert_float_array(FALSE, a, c, 3);
 }
 
 void test_assert_double(void) {
