@@ -27,13 +27,13 @@ void MTEST_set_fAccuracy(float accuracy);
 void MTEST_set_dAccuracy(double accuracy);
 
 
-void MTEST_assert_int(int cond, int a, int b);
+void MTEST_assert_int(int assert, int a, int b);
 
-void MTEST_int_array(int cond, const int *a, const int *b, unsigned long n);
+void MTEST_int_array(int assert, const int *a, const int *b, unsigned long n);
 
-void MTEST_assert_float(int cond, float a, float b);
+void MTEST_assert_float(int assert, float a, float b);
 
-void MTEST_float_array(int cond, const float *a, const float *b, unsigned long n);
+void MTEST_float_array(int assert, const float *a, const float *b, unsigned long n);
 
 /*
 	PUBLIC VARIABLES FOR USER
@@ -82,7 +82,7 @@ void mtest_close(void);
 	MTEST_run_test_suite: Macro that runs a test suite, which 
 	is simply a function with no return value that separates different
 	'suites' of tests (based on the users preferred logical/functional
-	separation). Accepts optional output condition that affects how
+	separation). Accepts optional output assertition that affects how
 	test results are displayed to the user.
 */ 
 #define MTEST_run_test_suite(test_suite_name, mtest_output_level) do {\
@@ -98,8 +98,8 @@ void mtest_close(void);
 } while (0)
 
 
-void MTEST_assert_int(int cond, int a, int b) {
-    if (((a == b) && (cond == TRUE)) || ((a != b) && (cond == FALSE))) {
+void MTEST_assert_int(int assert, int a, int b) {
+    if (((a == b) && (assert == TRUE)) || ((a != b) && (assert == FALSE))) {
         tests_passed++;
         test_status =  1;
     }    
@@ -112,14 +112,14 @@ void MTEST_assert_int(int cond, int a, int b) {
 /** Moved to an element wise check because annoyingly, when passed to a function arrays become simple pointers
  *  so it is impossible to query them for size.
  */
-void MTEST_int_array(int cond, const int *a, const int *b, unsigned long n) {
+void MTEST_int_array(int assert, const int *a, const int *b, unsigned long n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
         if (a[i] != b[i]) {
             result = 0;
         }
     }
-    if ((result == 1 && cond == TRUE) || (result == 0 && cond == FALSE)) {
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
         tests_passed++;
         test_status = 1;
     } else {
@@ -136,9 +136,9 @@ void MTEST_set_dAccuracy(double accuracy) {
     mtest_dAccuracy = accuracy;
 }
 
-void MTEST_assert_float(int cond, float a, float b) {
-    if (((fabsf(a - b) <= mtest_fAccuracy) && (cond == TRUE)) ||
-        ((fabsf(a - b) > mtest_fAccuracy) && (cond == FALSE))) {
+void MTEST_assert_float(int assert, float a, float b) {
+    if (((fabsf(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
+        ((fabsf(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
         tests_passed++;
         test_status = 1;
     } else {
@@ -147,7 +147,7 @@ void MTEST_assert_float(int cond, float a, float b) {
     mtest_update_test_status(test_status);
 }
 
-void MTEST_float_array(int cond, const float *a, const float *b, unsigned long n) {
+void MTEST_float_array(int assert, const float *a, const float *b, unsigned long n) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
@@ -155,7 +155,7 @@ void MTEST_float_array(int cond, const float *a, const float *b, unsigned long n
             result = 0;
         }
     }
-    if ((result == 1 && cond == TRUE) || (result == 0 && cond == FALSE)) {
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
         tests_passed++;
         test_status = 1;
     } else {
@@ -164,9 +164,9 @@ void MTEST_float_array(int cond, const float *a, const float *b, unsigned long n
     mtest_update_test_status(test_status);
 }
 
-void MTEST_assert_double(int cond, double a, double b) {
-    if (((fabs(a - b) <= mtest_fAccuracy) && (cond == TRUE)) ||
-        ((fabs(a - b) > mtest_fAccuracy) && (cond == FALSE))) {
+void MTEST_assert_double(int assert, double a, double b) {
+    if (((fabs(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
+        ((fabs(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
         tests_passed++;
         test_status = 1;
     } else {
@@ -175,7 +175,7 @@ void MTEST_assert_double(int cond, double a, double b) {
     mtest_update_test_status(test_status);
 }
 
-void MTEST_double_array(int cond, const double *a, const double *b, unsigned long n) {
+void MTEST_double_array(int assert, const double *a, const double *b, unsigned long n) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
@@ -183,7 +183,7 @@ void MTEST_double_array(int cond, const double *a, const double *b, unsigned lon
             result = 0;
         }
     }
-    if ((result == 1 && cond == TRUE) || (result == 0 && cond == FALSE)) {
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
         tests_passed++;
         test_status = 1;
     } else {
