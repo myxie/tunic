@@ -6,7 +6,6 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 /*
 	Define TIME_TESTS in your test file if you want
 	to use the timing functions
@@ -31,9 +30,22 @@ void MTEST_assert_int(int assert, int a, int b);
 
 void MTEST_assert_int_array(int assert, const int *a, const int *b, unsigned long n);
 
+void MTEST_almost_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance);
+
+
 void MTEST_assert_float(int assert, float a, float b);
 
 void MTEST_assert_float_array(int assert, const float *a, const float *b, unsigned long n);
+
+void MTEST_almost_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance);
+
+
+void MTEST_assert_double(int assert, double a, double b);
+
+void MTEST_assert_double_array(int assert, const double *a, const double *b, unsigned long n);
+
+void MTEST_almost_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
+
 
 /*
 	PUBLIC VARIABLES FOR USER
@@ -76,6 +88,10 @@ clock_t start_t;
 void mtest_update_test_status(int test_status);
 void mtest_init(void);
 void mtest_close(void);
+int mtest_abs_int(int a);
+float mtest_abs_float(float a);
+double mtest_abs_double(double a);
+long double mtest_abs_ldouble(long double a);
 
 
 /*
@@ -117,6 +133,25 @@ void MTEST_assert_int_array(int assert, const int *a, const int *b, unsigned lon
     for (i = 0; i < n; ++i) {
         if (a[i] != b[i]) {
             result = 0;
+            break;
+        }
+    }
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    mtest_update_test_status(test_status);
+}
+
+//TODO: handle negative tolerance case
+void MTEST_almost_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance){
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if (mtest_abs_int(a[i])-mtest_abs_int(b[i]) > tolerance) {
+            result = 0;
+            break;
         }
     }
     if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
@@ -137,8 +172,8 @@ void MTEST_set_dAccuracy(double accuracy) {
 }
 
 void MTEST_assert_float(int assert, float a, float b) {
-    if (((fabsf(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
-        ((fabsf(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
+    if (((mtest_abs_float(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
+        ((mtest_abs_float(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
         tests_passed++;
         test_status = 1;
     } else {
@@ -151,7 +186,7 @@ void MTEST_assert_float_array(int assert, const float *a, const float *b, unsign
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (fabsf(a[i] - b[i]) > mtest_fAccuracy) {
+        if (mtest_abs_float(a[i] - b[i]) > mtest_fAccuracy) {
             result = 0;
         }
     }
@@ -164,9 +199,17 @@ void MTEST_assert_float_array(int assert, const float *a, const float *b, unsign
     mtest_update_test_status(test_status);
 }
 
-void MTEST_assert_double(int assert, double a, double b) {
-    if (((fabs(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
-        ((fabs(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
+//TODO: handle negative tolerance case
+void MTEST_almost_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance){
+    //Moving away from memcmp test for floating point values
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if (mtest_abs_float(a[i] - b[i]) > tolerance) {
+            result = 0;
+            break;
+        }
+    }
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
         tests_passed++;
         test_status = 1;
     } else {
@@ -175,11 +218,37 @@ void MTEST_assert_double(int assert, double a, double b) {
     mtest_update_test_status(test_status);
 }
 
-void MTEST_double_array(int assert, const double *a, const double *b, unsigned long n) {
-    //Moving away from memcmp test for floating point values
+void MTEST_assert_double(int assert, double a, double b) {
+    if (((mtest_abs_double(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
+        ((mtest_abs_double(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    mtest_update_test_status(test_status);
+}
+
+void MTEST_assert_double_array(int assert, const double *a, const double *b, unsigned long n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (fabs(a[i] - b[i]) > mtest_fAccuracy) {
+        if (mtest_abs_double(a[i] - b[i]) > mtest_fAccuracy) {
+            result = 0;
+        }
+    }
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    mtest_update_test_status(test_status);
+}
+
+void MTEST_almost_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if (mtest_abs_double(a[i] - b[i]) > tolerance) {
             result = 0;
         }
     }
@@ -234,6 +303,23 @@ void mtest_update_test_status(int test_status){
     else{
         printf("Test %d failed\n", tests_run);    
     }
+}
+
+int mtest_abs_int(int a){ //Sneaky bit-hax method
+    int t = a >> ((sizeof(int)*8)-1);
+    return t ^ (a+t);
+}
+
+float mtest_abs_float(float a){ //Wasteful, heathen but simple implementation
+    return a<0?-a:a;
+}
+
+double mtest_abs_double(double a){
+    return a<0?-a:a;
+}
+
+long double mtest_abs_ldouble(long double a){
+    return a<0?-a:a;
 }
 
 #endif //MTEST_LIBRARY
