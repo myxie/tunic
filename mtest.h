@@ -21,30 +21,30 @@
 	are helper functions within the header file. 
 */
 
-void MTEST_set_fAccuracy(float accuracy);
+void mtest_SET_fAccuracy(float accuracy);
 
-void MTEST_set_dAccuracy(double accuracy);
-
-
-void MTEST_assert_int(int assert, int a, int b);
-
-void MTEST_assert_int_array(int assert, const int *a, const int *b, unsigned long n);
-
-void MTEST_almost_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance);
+void mtest_SET_dAccuracy(double accuracy);
 
 
-void MTEST_assert_float(int assert, float a, float b);
+void mtest_ASSERT_int(int assert, int a, int b);
 
-void MTEST_assert_float_array(int assert, const float *a, const float *b, unsigned long n);
+void mtest_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n);
 
-void MTEST_almost_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance);
+void mtest_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance);
 
 
-void MTEST_assert_double(int assert, double a, double b);
+void mtest_ASSERT_float(int assert, float a, float b);
 
-void MTEST_assert_double_array(int assert, const double *a, const double *b, unsigned long n);
+void mtest_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n);
 
-void MTEST_almost_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
+void mtest_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance);
+
+
+void mtest_ASSERT_double(int assert, double a, double b);
+
+void mtest_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
+
+void mtest_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
 
 
 /*
@@ -114,7 +114,7 @@ long double mtest_abs_ldouble(long double a);
 } while (0)
 
 
-void MTEST_assert_int(int assert, int a, int b) {
+void mtest_ASSERT_int(int assert, int a, int b) {
     if (((a == b) && (assert == TRUE)) || ((a != b) && (assert == FALSE))) {
         tests_passed++;
         test_status =  1;
@@ -128,7 +128,7 @@ void MTEST_assert_int(int assert, int a, int b) {
 /** Moved to an element wise check because annoyingly, when passed to a function arrays become simple pointers
  *  so it is impossible to query them for size.
  */
-void MTEST_assert_int_array(int assert, const int *a, const int *b, unsigned long n) {
+void mtest_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
         if (a[i] != b[i]) {
@@ -146,7 +146,7 @@ void MTEST_assert_int_array(int assert, const int *a, const int *b, unsigned lon
 }
 
 //TODO: handle negative tolerance case
-void MTEST_almost_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance){
+void mtest_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance){
     int i, result = 1;
     for (i = 0; i < n; ++i) {
         if (mtest_abs_int(a[i])-mtest_abs_int(b[i]) > tolerance) {
@@ -163,15 +163,15 @@ void MTEST_almost_int_array(int assert, const int *a, const int *b, unsigned lon
     mtest_update_test_status(test_status);
 }
 
-void MTEST_set_fAccuracy(float accuracy) {
+void mtest_SET_fAccuracy(float accuracy) {
     mtest_fAccuracy = accuracy;
 }
 
-void MTEST_set_dAccuracy(double accuracy) {
+void mtest_SET_dAccuracy(double accuracy) {
     mtest_dAccuracy = accuracy;
 }
 
-void MTEST_assert_float(int assert, float a, float b) {
+void mtest_ASSERT_float(int assert, float a, float b) {
     if (((mtest_abs_float(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
         ((mtest_abs_float(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
         tests_passed++;
@@ -182,7 +182,7 @@ void MTEST_assert_float(int assert, float a, float b) {
     mtest_update_test_status(test_status);
 }
 
-void MTEST_assert_float_array(int assert, const float *a, const float *b, unsigned long n) {
+void mtest_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
@@ -200,7 +200,7 @@ void MTEST_assert_float_array(int assert, const float *a, const float *b, unsign
 }
 
 //TODO: handle negative tolerance case
-void MTEST_almost_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance){
+void mtest_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance){
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
@@ -218,7 +218,7 @@ void MTEST_almost_float_array(int assert, const float *a, const float *b, unsign
     mtest_update_test_status(test_status);
 }
 
-void MTEST_assert_double(int assert, double a, double b) {
+void mtest_ASSERT_double(int assert, double a, double b) {
     if (((mtest_abs_double(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
         ((mtest_abs_double(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
         tests_passed++;
@@ -229,7 +229,7 @@ void MTEST_assert_double(int assert, double a, double b) {
     mtest_update_test_status(test_status);
 }
 
-void MTEST_assert_double_array(int assert, const double *a, const double *b, unsigned long n) {
+void mtest_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
         if (mtest_abs_double(a[i] - b[i]) > mtest_fAccuracy) {
@@ -245,7 +245,7 @@ void MTEST_assert_double_array(int assert, const double *a, const double *b, uns
     mtest_update_test_status(test_status);
 }
 
-void MTEST_almost_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
+void mtest_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
     int i, result = 1;
     for (i = 0; i < n; ++i) {
         if (mtest_abs_double(a[i] - b[i]) > tolerance) {
