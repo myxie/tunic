@@ -13,39 +13,6 @@
 #ifdef TIME_TESTS
 #include <time.h>
 #endif
-/*
-	TESTING API
-
-	All public API functions have tunic in lower case followed by capitalised 
-    functionality (ASSERT, SET etc.) Functions with lower case tunic_
-	are helper functions within the header file. 
-*/
-
-void tunic_SET_fAccuracy(float accuracy);
-
-void tunic_SET_dAccuracy(double accuracy);
-
-
-void tunic_ASSERT_int(int assert, int a, int b);
-
-void tunic_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n);
-
-void tunic_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance);
-
-
-void tunic_ASSERT_float(int assert, float a, float b);
-
-void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n);
-
-void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance);
-
-
-void tunic_ASSERT_double(int assert, double a, double b);
-
-void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
-
-void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
-
 
 /*
 	PUBLIC VARIABLES FOR USER
@@ -60,6 +27,40 @@ enum tunic_output_level{
 	STD_OUTPUT,
 	TIME
 };
+
+
+/*
+    TESTING API
+
+    All public API functions have tunic in lower case followed by capitalised 
+    functionality (ASSERT, SET etc.) Functions with lower case tunic_
+    are helper functions within the header file. 
+*/
+
+/*
+    INTEGER 
+*/
+void tunic_ASSERT_int(int assert, int a, int b);
+void tunic_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n);
+void tunic_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance);
+
+/*
+    FLOAT 
+*/
+
+void tunic_ASSERT_float(int assert, float a, float b);
+void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n);
+void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance);
+
+/*  
+    DOUBLE
+*/
+
+void tunic_ASSERT_double(int assert, double a, double b);
+void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
+void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
+
+
 
 /*
 	The end of the header file! 
@@ -95,11 +96,18 @@ long double tunic_abs_ldouble(long double a);
 
 
 /*
-	tunic_run_test_suite: Macro that runs a test suite, which 
-	is simply a function with no return value that separates different
-	'suites' of tests (based on the users preferred logical/functional
-	separation). Accepts optional output assertition that affects how
-	test results are displayed to the user.
+===============================================================================
+TEST-RUNNER MACROS
+===============================================================================
+*/
+
+/*
+	tunic_run_test_suite:
+    Runs a test suite, which is simply a function with no return 
+    value that separates different 'suites' of tests (based on the
+    users preferred logical/functional separation). Accepts optional
+    output assertition that affects how test results are displayed
+    to the user [TODO].
 */ 
 #define tunic_run_test_suite(test_suite_name, tunic_output_level) do {\
 	printf("Running tests for: '%s'\n", #test_suite_name);\
@@ -114,6 +122,12 @@ long double tunic_abs_ldouble(long double a);
 } while (0)
 
 
+/*
+===============================================================================
+INTEGER 
+===============================================================================
+*/
+
 void tunic_ASSERT_int(int assert, int a, int b) {
     if (((a == b) && (assert == TRUE)) || ((a != b) && (assert == FALSE))) {
         tests_passed++;
@@ -125,9 +139,10 @@ void tunic_ASSERT_int(int assert, int a, int b) {
     tunic_update_test_status(test_status);
 }
 
-/** Moved to an element wise check because annoyingly, when passed to a function arrays become simple pointers
- *  so it is impossible to query them for size.
- */
+/*
+    Element wise check due to pointer depreciation of arrays
+    when passed as a parameter to a function. 
+*/
 void tunic_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
@@ -163,13 +178,12 @@ void tunic_ALMOST_int_array(int assert, const int *a, const int *b, unsigned lon
     tunic_update_test_status(test_status);
 }
 
-void tunic_SET_fAccuracy(float accuracy) {
-    tunic_fAccuracy = accuracy;
-}
+/*
+===============================================================================
+FLOAT
+===============================================================================
+*/
 
-void tunic_SET_dAccuracy(double accuracy) {
-    tunic_dAccuracy = accuracy;
-}
 
 void tunic_ASSERT_float(int assert, float a, float b) {
     if (((tunic_abs_float(a - b) <= tunic_fAccuracy) && (assert == TRUE)) ||
@@ -218,6 +232,13 @@ void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsign
     tunic_update_test_status(test_status);
 }
 
+
+/*
+===============================================================================
+DOUBLE
+===============================================================================
+*/
+
 void tunic_ASSERT_double(int assert, double a, double b) {
     if (((tunic_abs_double(a - b) <= tunic_fAccuracy) && (assert == TRUE)) ||
         ((tunic_abs_double(a - b) > tunic_fAccuracy) && (assert == FALSE))) {
@@ -261,8 +282,11 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
     tunic_update_test_status(test_status);
 }
 
+
 /*
-	Timing Functions
+===============================================================================
+TIME 
+===============================================================================
 */
 
 #ifdef TIME_TESTS
@@ -282,7 +306,9 @@ void tunic_stop_timer(){
 #endif //TIME_TESTS
 
 /*
-	Private tunic functions that are only used in this file
+===============================================================================
+PRIVATE FUNCTIONS
+===============================================================================
 */
 
 void tunic_init(void){
