@@ -184,7 +184,6 @@ FLOAT
 ===============================================================================
 */
 
-
 void tunic_ASSERT_float(int assert, float a, float b) {
     if (((tunic_abs_float(a - b) <= tunic_fAccuracy) && (assert == TRUE)) ||
         ((tunic_abs_float(a - b) > tunic_fAccuracy) && (assert == FALSE))) {
