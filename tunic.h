@@ -1,7 +1,7 @@
 /*Code initially developed from http://www.jera.com/techinfo/jtns/jtn002.html*/
 
-#ifndef MTEST_H
-#define MTEST_H
+#ifndef TUNIC_H
+#define TUNIC_H
 
 #include <stdio.h> 
 #include <stdlib.h>
@@ -16,35 +16,35 @@
 /*
 	TESTING API
 
-	All public API functions have MTEST in capitals 
-	prepended to the function. Functions with lower case mtest_
+	All public API functions have tunic in lower case followed by capitalised 
+    functionality (ASSERT, SET etc.) Functions with lower case tunic_
 	are helper functions within the header file. 
 */
 
-void mtest_SET_fAccuracy(float accuracy);
+void tunic_SET_fAccuracy(float accuracy);
 
-void mtest_SET_dAccuracy(double accuracy);
-
-
-void mtest_ASSERT_int(int assert, int a, int b);
-
-void mtest_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n);
-
-void mtest_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance);
+void tunic_SET_dAccuracy(double accuracy);
 
 
-void mtest_ASSERT_float(int assert, float a, float b);
+void tunic_ASSERT_int(int assert, int a, int b);
 
-void mtest_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n);
+void tunic_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n);
 
-void mtest_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance);
+void tunic_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance);
 
 
-void mtest_ASSERT_double(int assert, double a, double b);
+void tunic_ASSERT_float(int assert, float a, float b);
 
-void mtest_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
+void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n);
 
-void mtest_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
+void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance);
+
+
+void tunic_ASSERT_double(int assert, double a, double b);
+
+void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
+
+void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
 
 
 /*
@@ -56,7 +56,7 @@ void mtest_ALMOST_double_array(int assert, const double *a, const double *b, uns
 #define TRUE  1 
 #define FALSE 0
 
-enum MTEST_output_level{
+enum tunic_output_level{
 	STD_OUTPUT,
 	TIME
 };
@@ -64,19 +64,19 @@ enum MTEST_output_level{
 /*
 	The end of the header file! 
 */
-#endif //MTEST_H
+#endif //tunic_H
 
 /*
 	IMPLEMENTATION 
 */
 
-#ifdef MTEST_LIBRARY
+#ifdef TUNIC_LIBRARY
 
 int test_status;
 int tests_run;
 int tests_passed;
-float mtest_fAccuracy = 1e-7;
-double mtest_dAccuracy = 1e-15;
+float tunic_fAccuracy = 1e-7;
+double tunic_dAccuracy = 1e-15;
 
 #ifdef TIME_TESTS
 clock_t start_t;
@@ -85,36 +85,36 @@ clock_t start_t;
 /*
 	Private helper functions 
 */
-void mtest_update_test_status(int test_status);
-void mtest_init(void);
-void mtest_close(void);
-int mtest_abs_int(int a);
-float mtest_abs_float(float a);
-double mtest_abs_double(double a);
-long double mtest_abs_ldouble(long double a);
+void tunic_update_test_status(int test_status);
+void tunic_init(void);
+void tunic_close(void);
+int tunic_abs_int(int a);
+float tunic_abs_float(float a);
+double tunic_abs_double(double a);
+long double tunic_abs_ldouble(long double a);
 
 
 /*
-	MTEST_run_test_suite: Macro that runs a test suite, which 
+	tunic_run_test_suite: Macro that runs a test suite, which 
 	is simply a function with no return value that separates different
 	'suites' of tests (based on the users preferred logical/functional
 	separation). Accepts optional output assertition that affects how
 	test results are displayed to the user.
 */ 
-#define MTEST_run_test_suite(test_suite_name, mtest_output_level) do {\
+#define tunic_run_test_suite(test_suite_name, tunic_output_level) do {\
 	printf("Running tests for: '%s'\n", #test_suite_name);\
-	mtest_init();\
-	if(mtest_output_level == TIME){\
+	tunic_init();\
+	if(tunic_output_level == TIME){\
 		test_suite_name();\
 	} else{\
 		test_suite_name();\
 	}\
-	mtest_close();	\
+	tunic_close();	\
 	printf("Finished test suite\n\n");\
 } while (0)
 
 
-void mtest_ASSERT_int(int assert, int a, int b) {
+void tunic_ASSERT_int(int assert, int a, int b) {
     if (((a == b) && (assert == TRUE)) || ((a != b) && (assert == FALSE))) {
         tests_passed++;
         test_status =  1;
@@ -122,13 +122,13 @@ void mtest_ASSERT_int(int assert, int a, int b) {
     else{
         test_status = 0;
     }
-    mtest_update_test_status(test_status);
+    tunic_update_test_status(test_status);
 }
 
 /** Moved to an element wise check because annoyingly, when passed to a function arrays become simple pointers
  *  so it is impossible to query them for size.
  */
-void mtest_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n) {
+void tunic_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
         if (a[i] != b[i]) {
@@ -142,14 +142,14 @@ void mtest_ASSERT_int_array(int assert, const int *a, const int *b, unsigned lon
     } else {
         test_status = 0;
     }
-    mtest_update_test_status(test_status);
+    tunic_update_test_status(test_status);
 }
 
 //TODO: handle negative tolerance case
-void mtest_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance){
+void tunic_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance){
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (mtest_abs_int(a[i])-mtest_abs_int(b[i]) > tolerance) {
+        if (tunic_abs_int(a[i])-tunic_abs_int(b[i]) > tolerance) {
             result = 0;
             break;
         }
@@ -160,33 +160,33 @@ void mtest_ALMOST_int_array(int assert, const int *a, const int *b, unsigned lon
     } else {
         test_status = 0;
     }
-    mtest_update_test_status(test_status);
+    tunic_update_test_status(test_status);
 }
 
-void mtest_SET_fAccuracy(float accuracy) {
-    mtest_fAccuracy = accuracy;
+void tunic_SET_fAccuracy(float accuracy) {
+    tunic_fAccuracy = accuracy;
 }
 
-void mtest_SET_dAccuracy(double accuracy) {
-    mtest_dAccuracy = accuracy;
+void tunic_SET_dAccuracy(double accuracy) {
+    tunic_dAccuracy = accuracy;
 }
 
-void mtest_ASSERT_float(int assert, float a, float b) {
-    if (((mtest_abs_float(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
-        ((mtest_abs_float(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
+void tunic_ASSERT_float(int assert, float a, float b) {
+    if (((tunic_abs_float(a - b) <= tunic_fAccuracy) && (assert == TRUE)) ||
+        ((tunic_abs_float(a - b) > tunic_fAccuracy) && (assert == FALSE))) {
         tests_passed++;
         test_status = 1;
     } else {
         test_status = 0;
     }
-    mtest_update_test_status(test_status);
+    tunic_update_test_status(test_status);
 }
 
-void mtest_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n) {
+void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (mtest_abs_float(a[i] - b[i]) > mtest_fAccuracy) {
+        if (tunic_abs_float(a[i] - b[i]) > tunic_fAccuracy) {
             result = 0;
         }
     }
@@ -196,15 +196,15 @@ void mtest_ASSERT_float_array(int assert, const float *a, const float *b, unsign
     } else {
         test_status = 0;
     }
-    mtest_update_test_status(test_status);
+    tunic_update_test_status(test_status);
 }
 
 //TODO: handle negative tolerance case
-void mtest_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance){
+void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance){
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (mtest_abs_float(a[i] - b[i]) > tolerance) {
+        if (tunic_abs_float(a[i] - b[i]) > tolerance) {
             result = 0;
             break;
         }
@@ -215,24 +215,24 @@ void mtest_ALMOST_float_array(int assert, const float *a, const float *b, unsign
     } else {
         test_status = 0;
     }
-    mtest_update_test_status(test_status);
+    tunic_update_test_status(test_status);
 }
 
-void mtest_ASSERT_double(int assert, double a, double b) {
-    if (((mtest_abs_double(a - b) <= mtest_fAccuracy) && (assert == TRUE)) ||
-        ((mtest_abs_double(a - b) > mtest_fAccuracy) && (assert == FALSE))) {
+void tunic_ASSERT_double(int assert, double a, double b) {
+    if (((tunic_abs_double(a - b) <= tunic_fAccuracy) && (assert == TRUE)) ||
+        ((tunic_abs_double(a - b) > tunic_fAccuracy) && (assert == FALSE))) {
         tests_passed++;
         test_status = 1;
     } else {
         test_status = 0;
     }
-    mtest_update_test_status(test_status);
+    tunic_update_test_status(test_status);
 }
 
-void mtest_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n) {
+void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (mtest_abs_double(a[i] - b[i]) > mtest_fAccuracy) {
+        if (tunic_abs_double(a[i] - b[i]) > tunic_fAccuracy) {
             result = 0;
         }
     }
@@ -242,13 +242,13 @@ void mtest_ASSERT_double_array(int assert, const double *a, const double *b, uns
     } else {
         test_status = 0;
     }
-    mtest_update_test_status(test_status);
+    tunic_update_test_status(test_status);
 }
 
-void mtest_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
+void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (mtest_abs_double(a[i] - b[i]) > tolerance) {
+        if (tunic_abs_double(a[i] - b[i]) > tolerance) {
             result = 0;
         }
     }
@@ -258,7 +258,7 @@ void mtest_ALMOST_double_array(int assert, const double *a, const double *b, uns
     } else {
         test_status = 0;
     }
-    mtest_update_test_status(test_status);
+    tunic_update_test_status(test_status);
 }
 
 /*
@@ -266,11 +266,11 @@ void mtest_ALMOST_double_array(int assert, const double *a, const double *b, uns
 */
 
 #ifdef TIME_TESTS
-void MTEST_start_timer(void){
+void tunic_start_timer(void){
     start_t = clock();
 }
 
-void MTEST_stop_timer(){
+void tunic_stop_timer(){
     clock_t end_t;
     double seconds;
 
@@ -282,20 +282,20 @@ void MTEST_stop_timer(){
 #endif //TIME_TESTS
 
 /*
-	Private mtest functions that are only used in this file
+	Private tunic functions that are only used in this file
 */
 
-void mtest_init(void){
+void tunic_init(void){
     tests_run = 0;
     tests_passed = 0;
 }
 
-void mtest_close(void){
+void tunic_close(void){
     printf("Passed %d out of %d tests\n", tests_passed, tests_run);     
 } 
 
 
-void mtest_update_test_status(int test_status){
+void tunic_update_test_status(int test_status){
    	tests_run++;
     if(test_status > 0){
         printf("Test %d passed\n", tests_run);    
@@ -305,22 +305,22 @@ void mtest_update_test_status(int test_status){
     }
 }
 
-int mtest_abs_int(int a){ //Sneaky bit-hax method
+int tunic_abs_int(int a){ //Sneaky bit-hax method
     int t = a >> ((sizeof(int)*8)-1);
     return t ^ (a+t);
 }
 
-float mtest_abs_float(float a){ //Wasteful, heathen but simple implementation
+float tunic_abs_float(float a){ //Wasteful, heathen but simple implementation
     return a<0?-a:a;
 }
 
-double mtest_abs_double(double a){
+double tunic_abs_double(double a){
     return a<0?-a:a;
 }
 
-long double mtest_abs_ldouble(long double a){
+long double tunic_abs_ldouble(long double a){
     return a<0?-a:a;
 }
 
-#endif //MTEST_LIBRARY
+#endif //TUNIC_LIBRARY
 
