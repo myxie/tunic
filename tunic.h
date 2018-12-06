@@ -12,7 +12,7 @@ Copyright (C) 2018 RW Bunney, N Pritchard
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.  
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 **/
 
 /*Code initially developed from http://www.jera.com/techinfo/jtns/jtn002.html*/
@@ -20,56 +20,57 @@ Copyright (C) 2018 RW Bunney, N Pritchard
 #ifndef TUNIC_H
 #define TUNIC_H
 
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 /*
-	Define TIME_TESTS in your test file if you want
-	to use the timing functions
+    Define TIME_TESTS in your test file if you want
+    to use the timing functions
 */
 #ifdef TIME_TESTS
 #include <time.h>
 #endif
 
 /*
-	PUBLIC VARIABLES FOR USER
-	Defining TRUE and FALSE makes things easier, and 
-	means we do not need to use booleans
+    PUBLIC VARIABLES FOR USER
+    Defining TRUE and FALSE makes things easier, and
+    means we do not need to use booleans
 */
 
-#define TRUE  1 
+#define TRUE  1
 #define FALSE 0
 
+
 enum tunic_output_level{
-	STD_OUTPUT,
-	TIME
+    STD_OUTPUT,
+    TIME
 };
 
 
 /*
     TESTING API
 
-    All public API functions have tunic in lower case followed by capitalised 
+    All public API functions have tunic in lower case followed by capitalised
     functionality (ASSERT, SET etc.) Functions with lower case tunic_
-    are helper functions within the header file. 
+    are helper functions within the header file.
 */
 
 /*
-    INTEGER 
+    INTEGER
 */
 void tunic_ASSERT_int(int assert, int a, int b);
 void tunic_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n);
 void tunic_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance);
 
 /*
-    FLOAT 
+    FLOAT
 */
 
 void tunic_ASSERT_float(int assert, float a, float b);
 void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n);
 void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance);
 
-/*  
+/*
     DOUBLE
 */
 
@@ -80,12 +81,12 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
 
 
 /*
-	The end of the header file! 
+  The end of the header file!
 */
 #endif //tunic_H
 
 /*
-	IMPLEMENTATION 
+  IMPLEMENTATION
 */
 
 #ifdef TUNIC_LIBRARY
@@ -101,7 +102,7 @@ clock_t start_t;
 #endif
 
 /*
-	Private helper functions 
+  Private helper functions
 */
 void tunic_update_test_status(int test_status);
 void tunic_init(void);
@@ -119,29 +120,29 @@ TEST-RUNNER MACROS
 */
 
 /*
-	tunic_run_test_suite:
-    Runs a test suite, which is simply a function with no return 
+    tunic_run_test_suite:
+    Runs a test suite, which is simply a function with no return
     value that separates different 'suites' of tests (based on the
     users preferred logical/functional separation). Accepts optional
     output assertition that affects how test results are displayed
     to the user [TODO].
-*/ 
+*/
 #define tunic_run_test_suite(test_suite_name, tunic_output_level) do {\
-	printf("Running tests for: '%s'\n", #test_suite_name);\
-	tunic_init();\
-	if(tunic_output_level == TIME){\
-		test_suite_name();\
-	} else{\
-		test_suite_name();\
-	}\
-	tunic_close();	\
-	printf("Finished test suite\n\n");\
+        printf("Running tests for: '%s'\n", #test_suite_name);        \
+        tunic_init();                                                 \
+        if(tunic_output_level == TIME){                               \
+            test_suite_name();                                        \
+        } else{\
+            test_suite_name();                  \
+        }                                       \
+        tunic_close();\
+        printf("Finished test suite\n\n");      \
 } while (0)
 
 
 /*
 ===============================================================================
-INTEGER 
+INTEGER
 ===============================================================================
 */
 
@@ -149,7 +150,7 @@ void tunic_ASSERT_int(int assert, int a, int b) {
     if (((a == b) && (assert == TRUE)) || ((a != b) && (assert == FALSE))) {
         tests_passed++;
         test_status =  1;
-    }    
+    }
     else{
         test_status = 0;
     }
@@ -158,7 +159,7 @@ void tunic_ASSERT_int(int assert, int a, int b) {
 
 /*
     Element wise check due to pointer depreciation of arrays
-    when passed as a parameter to a function. 
+    when passed as a parameter to a function.
 */
 void tunic_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n) {
     int i, result = 1;
@@ -244,7 +245,7 @@ void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsign
         test_status = 1;
     } else {
         test_status = 0;
-    }
+
     tunic_update_test_status(test_status);
 }
 
@@ -301,7 +302,7 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
 
 /*
 ===============================================================================
-TIME 
+TIME
 ===============================================================================
 */
 
@@ -333,17 +334,17 @@ void tunic_init(void){
 }
 
 void tunic_close(void){
-    printf("Passed %d out of %d tests\n", tests_passed, tests_run);     
-} 
+    printf("Passed %d out of %d tests\n", tests_passed, tests_run);
+}
 
 
 void tunic_update_test_status(int test_status){
-   	tests_run++;
+    tests_run++;
     if(test_status > 0){
-        printf("Test %d passed\n", tests_run);    
+        printf("Test %d passed\n", tests_run);
     }
     else{
-        printf("Test %d failed\n", tests_run);    
+        printf("Test %d failed\n", tests_run);
     }
 }
 
@@ -365,4 +366,3 @@ long double tunic_abs_ldouble(long double a){
 }
 
 #endif //TUNIC_LIBRARY
-
