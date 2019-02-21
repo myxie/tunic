@@ -77,7 +77,7 @@ void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsign
 void tunic_ASSERT_double(int assert, double a, double b);
 void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
 void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
-void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
+void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n);
 
 
 /*
@@ -303,10 +303,10 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
 /*
  * Asserts a[i] < b[i] for 0 <= i < n
  */
-void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
+void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n){
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if ((a[i] - b[i]) > (0.0 + tolerance)) { //TODO: Check this logic, I might be missing the other edge case
+        if ((a[i] - b[i]) > (tunic_fAccuracy)) { //TODO: Check this logic, I might be missing the other edge case
             result = 0;
         }
     }

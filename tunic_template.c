@@ -146,11 +146,11 @@ void test_less_array_double(void){
     double c[] = {0.0, 0.5, 0.5};
     double d[] = {1.0, 1.0, 1.0};
 
-    tunic_LESS_double_array(TRUE, a, b, 3, 1e-8); // Pass
-    tunic_LESS_double_array(FALSE, a, b, 3, 1e-8); // Fail
-    tunic_LESS_double_array(TRUE, d, c, 3, 1e-8); // Fail
-    tunic_LESS_double_array(FALSE, c, d, 3, 1e-8); // Fail
-    tunic_LESS_double_array(TRUE, c, d, 3, 1e-8); // Pass
+    tunic_LESS_double_array(TRUE, a, b, 3); // Pass
+    tunic_LESS_double_array(FALSE, a, b, 3); // Fail
+    tunic_LESS_double_array(TRUE, d, c, 3); // Fail
+    tunic_LESS_double_array(FALSE, c, d, 3); // Fail
+    tunic_LESS_double_array(TRUE, c, d, 3); // Pass
 }
 
 int main(int argc, char *argv[]) {
