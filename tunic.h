@@ -80,6 +80,7 @@ void tunic_GREAT_double(int assert, double a, double b);
 void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
 void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
 void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n);
+void tunic_GREAT_double_array(int assert, const double *a, const double *b, unsigned long n);
 
 
 /*
@@ -334,6 +335,10 @@ void tunic_LESS_double_array(int assert, const double *a, const double *b, unsig
     }
 
     tunic_update_test_status(test_status);
+}
+
+void tunic_GREAT_double_array(int assert, const double *a, const double *b, unsigned long n){
+    tunic_LESS_double_array(1-assert, a, b, n); //Cheeky me pt II.
 }
 
 
