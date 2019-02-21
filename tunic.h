@@ -75,9 +75,10 @@ void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsign
 */
 
 void tunic_ASSERT_double(int assert, double a, double b);
+void tunic_LESS_double(int assert, double a, double b);
 void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
 void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
-
+void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n);
 
 
 /*
@@ -231,7 +232,7 @@ void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsign
 }
 
 //TODO: handle negative tolerance case
-void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance){
+void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
@@ -246,7 +247,8 @@ void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsign
     } else {
         test_status = 0;
 
-    tunic_update_test_status(test_status);
+        tunic_update_test_status(test_status);
+    }
 }
 
 
@@ -256,7 +258,7 @@ DOUBLE
 ===============================================================================
 */
 
-void tunic_ASSERT_double(int assert, double a, double b) {
+void tunic_ASSERT_double(int assert, double a, double b){
     if (((tunic_abs_double(a - b) <= tunic_fAccuracy) && (assert == TRUE)) ||
         ((tunic_abs_double(a - b) > tunic_fAccuracy) && (assert == FALSE))) {
         tests_passed++;
@@ -264,6 +266,16 @@ void tunic_ASSERT_double(int assert, double a, double b) {
     } else {
         test_status = 0;
     }
+    tunic_update_test_status(test_status);
+}
+
+void tunic_LESS_double(int assert, double a, double b){
+    if((assert == TRUE && a < b) || (assert == FALSE && a > b)){
+        tests_passed++;
+        test_status = 1;
+    } else{
+        test_status = 0;
+    };
     tunic_update_test_status(test_status);
 }
 
@@ -296,6 +308,26 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
     } else {
         test_status = 0;
     }
+    tunic_update_test_status(test_status);
+}
+
+/*
+ * Asserts a[i] < b[i] for 0 <= i < n
+ */
+void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n){
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if ((a[i] - b[i]) > (tunic_fAccuracy)) { //TODO: Check this logic, I might be missing the other edge case
+            result = 0;
+        }
+    }
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+
     tunic_update_test_status(test_status);
 }
 
