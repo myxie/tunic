@@ -140,6 +140,19 @@ void test_almost_array_double(void){
     tunic_ALMOST_double_array(FALSE, a, d, 3, 1e-8); // Pass
 }
 
+void test_less_array_double(void){
+    double a[] = {0.0, 1e-8, 1e-8};
+    double b[] = {0.0, 1e-2, 1e-2};
+    double c[] = {0.0, 0.5, 0.5};
+    double d[] = {1.0, 1.0, 1.0};
+
+    tunic_LESS_double_array(TRUE, a, b, 3, 1e-8); // Pass
+    tunic_LESS_double_array(FALSE, a, b, 3, 1e-8); // Fail
+    tunic_LESS_double_array(TRUE, d, c, 3, 1e-8); // Fail
+    tunic_LESS_double_array(FALSE, c, d, 3, 1e-8); // Fail
+    tunic_LESS_double_array(TRUE, c, d, 3, 1e-8); // Pass
+}
+
 int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_assert_int, STD_OUTPUT);
     tunic_run_test_suite(test_assert_array_int, STD_OUTPUT);
@@ -152,5 +165,6 @@ int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_assert_double, STD_OUTPUT);
     tunic_run_test_suite(test_assert_array_double, STD_OUTPUT);
     tunic_run_test_suite(test_almost_array_double, STD_OUTPUT);
+    tunic_run_test_suite(test_less_array_double, STD_OUTPUT);
     return 0;
 }
