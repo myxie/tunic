@@ -76,6 +76,7 @@ void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsign
 
 void tunic_ASSERT_double(int assert, double a, double b);
 void tunic_LESS_double(int assert, double a, double b);
+void tunic_LEQ_double(int assert, double a, double b);
 void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
 void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
 void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n);
@@ -276,6 +277,18 @@ void tunic_LESS_double(int assert, double a, double b){
     } else{
         test_status = 0;
     };
+    tunic_update_test_status(test_status);
+}
+
+void tunic_LEQ_double(int assert, double a, double b){
+    double diff = a - b;
+    if((((tunic_abs_double(diff) <= tunic_fAccuracy) && (assert == TRUE)) || a < b) ||
+        (((tunic_abs_double(diff) > tunic_fAccuracy) && (assert == FALSE)) || a > b)){
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
     tunic_update_test_status(test_status);
 }
 
