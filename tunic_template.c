@@ -128,7 +128,20 @@ void test_less_double(void){
     tunic_LESS_double(FALSE, x, z); // Pass
 }
 
+void test_great_double(void){
+    double x = 1.0;
+    double y = 2.0;
+    double z = -1.0;
 
+    tunic_GREAT_double(TRUE, x, y); // Fail
+    tunic_GREAT_double(FALSE, x, y); // Pass
+    tunic_GREAT_double(TRUE, y, z); // Pass
+    tunic_GREAT_double(FALSE, y, x); // Fail
+    tunic_GREAT_double(TRUE, z, x); // Fail
+    tunic_GREAT_double(FALSE, z, x); // Pass
+    tunic_GREAT_double(TRUE, x, z); // Pass
+    tunic_GREAT_double(FALSE, x, z); // Fail
+}
 
 void test_assert_array_double(void) {
     double a[] = {0.0, 1e-8, 1e-8};
@@ -170,6 +183,19 @@ void test_less_array_double(void){
     tunic_LESS_double_array(TRUE, c, d, 3); // Pass
 }
 
+void test_great_array_double(void){
+    double a[] = {0.0, 1e-8, 1e-8};
+    double b[] = {0.0, 1e-2, 1e-2};
+    double c[] = {0.0, 0.5, 0.5};
+    double d[] = {1.0, 1.0, 1.0};
+
+    tunic_GREAT_double_array(TRUE, a, b, 3); // Fail
+    tunic_GREAT_double_array(FALSE, a, b, 3); // Pass
+    tunic_GREAT_double_array(TRUE, d, c, 3); // Pass
+    tunic_GREAT_double_array(FALSE, c, d, 3); // Pass
+    tunic_GREAT_double_array(TRUE, c, d, 3); // Fail
+}
+
 int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_assert_int, STD_OUTPUT);
     tunic_run_test_suite(test_assert_array_int, STD_OUTPUT);
@@ -181,8 +207,10 @@ int main(int argc, char *argv[]) {
 
     tunic_run_test_suite(test_assert_double, STD_OUTPUT);
     tunic_run_test_suite(test_less_double, STD_OUTPUT);
+    tunic_run_test_suite(test_great_double, STD_OUTPUT);
     tunic_run_test_suite(test_assert_array_double, STD_OUTPUT);
     tunic_run_test_suite(test_almost_array_double, STD_OUTPUT);
     tunic_run_test_suite(test_less_array_double, STD_OUTPUT);
+    tunic_run_test_suite(test_great_array_double, STD_OUTPUT);
     return 0;
 }
