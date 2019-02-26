@@ -80,6 +80,7 @@ void tunic_LEQ_double(int assert, double a, double b);
 void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
 void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
 void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n);
+void tunic_LEQ_double_array(int assert, const double *a, const double *b, unsigned long n);
 
 
 /*
@@ -260,8 +261,8 @@ DOUBLE
 */
 
 void tunic_ASSERT_double(int assert, double a, double b){
-    if (((tunic_abs_double(a - b) <= tunic_fAccuracy) && (assert == TRUE)) ||
-        ((tunic_abs_double(a - b) > tunic_fAccuracy) && (assert == FALSE))) {
+    if (((tunic_abs_double(a - b) <= tunic_dAccuracy) && (assert == TRUE)) ||
+        ((tunic_abs_double(a - b) > tunic_dAccuracy) && (assert == FALSE))) {
         tests_passed++;
         test_status = 1;
     } else {
@@ -282,8 +283,8 @@ void tunic_LESS_double(int assert, double a, double b){
 
 void tunic_LEQ_double(int assert, double a, double b){
     double diff = a - b;
-    if((((tunic_abs_double(diff) <= tunic_fAccuracy) && (assert == TRUE)) || a < b) ||
-        (((tunic_abs_double(diff) > tunic_fAccuracy) && (assert == FALSE)) || a > b)){
+    if((((tunic_abs_double(diff) <= tunic_dAccuracy) && (assert == TRUE)) || a < b) ||
+        (((tunic_abs_double(diff) > tunic_dAccuracy) && (assert == FALSE)) || a > b)){
         tests_passed++;
         test_status = 1;
     } else {
@@ -295,7 +296,7 @@ void tunic_LEQ_double(int assert, double a, double b){
 void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n) {
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (tunic_abs_double(a[i] - b[i]) > tunic_fAccuracy) {
+        if (tunic_abs_double(a[i] - b[i]) > tunic_dAccuracy) {
             result = 0;
         }
     }
@@ -330,7 +331,24 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
 void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n){
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if ((a[i] - b[i]) > (tunic_fAccuracy)) { //TODO: Check this logic, I might be missing the other edge case
+        if ((a[i] - b[i]) > tunic_dAccuracy) { //TODO: Check this logic, I might be missing the other edge case
+            result = 0;
+        }
+    }
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+
+    tunic_update_test_status(test_status);
+}
+
+void tunic_LEQ_double_array(int assert, const double *a, const double *b, unsigned long n){
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if ((a[i] - b[i]) > 0.0) {
             result = 0;
         }
     }
