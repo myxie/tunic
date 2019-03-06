@@ -91,8 +91,6 @@ void tunic_ASSERT_double_array(int assert, const double *a, const double *b, uns
 void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
 
 
-
-
 /*
   The end of the header file!
 */
@@ -291,54 +289,6 @@ void tunic_LESS_double(int assert, double a, double b){
     tunic_update_test_status(test_status);
 }
 
-void tunic_LEQ_double(int assert, double a, double b) {
-    double diff = a - b;
-    if ((((tunic_abs_double(diff) <= tunic_dAccuracy) && (assert == TRUE)) || a < b) ||
-        (((tunic_abs_double(diff) > tunic_dAccuracy) && (assert == FALSE)) || a > b)) {
-        tests_passed++;
-        test_status = 1;
-    } else {
-        test_status = 0;
-    }
-    tunic_update_test_status(test_status);
-}
-
-void tunic_GREAT_double(int assert, double a, double b){
-    tunic_LESS_double(1-assert, a, b); //Look at me being cheeky
-}
-
-void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n) {
-    int i, result = 1;
-    for (i = 0; i < n; ++i) {
-        if (tunic_abs_double(a[i] - b[i]) > tunic_dAccuracy) {
-            result = 0;
-        }
-    }
-    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
-        tests_passed++;
-        test_status = 1;
-    } else {
-        test_status = 0;
-    }
-    tunic_update_test_status(test_status);
-}
-
-void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
-    int i, result = 1;
-    for (i = 0; i < n; ++i) {
-        if (tunic_abs_double(a[i] - b[i]) > tolerance) {
-            result = 0;
-        }
-    }
-    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
-        tests_passed++;
-        test_status = 1;
-    } else {
-        test_status = 0;
-    }
-    tunic_update_test_status(test_status);
-}
-
 /*
  * Asserts a[i] < b[i] for 0 <= i < n
  */
@@ -359,6 +309,18 @@ void tunic_LESS_double_array(int assert, const double *a, const double *b, unsig
     tunic_update_test_status(test_status);
 }
 
+void tunic_LEQ_double(int assert, double a, double b) {
+    double diff = a - b;
+    if ((((tunic_abs_double(diff) <= tunic_dAccuracy) && (assert == TRUE)) || a < b) ||
+        (((tunic_abs_double(diff) > tunic_dAccuracy) && (assert == FALSE)) || a > b)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    tunic_update_test_status(test_status);
+}
+
 void tunic_LEQ_double_array(int assert, const double *a, const double *b, unsigned long n){
     int i, result = 1;
     for (i = 0; i < n; ++i) {
@@ -374,6 +336,10 @@ void tunic_LEQ_double_array(int assert, const double *a, const double *b, unsign
     }
 
     tunic_update_test_status(test_status);
+}
+
+void tunic_GREAT_double(int assert, double a, double b){
+    tunic_LESS_double(1-assert, a, b); //Look at me being cheeky
 }
 
 void tunic_GREAT_double_array(int assert, const double *a, const double *b, unsigned long n){
@@ -409,6 +375,37 @@ void tunic_GEQ_double_array(int assert, const double *a, const double *b, unsign
     tunic_update_test_status(test_status);
 }
 
+void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n) {
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if (tunic_abs_double(a[i] - b[i]) > tunic_dAccuracy) {
+            result = 0;
+        }
+    }
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    tunic_update_test_status(test_status);
+}
+
+void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
+    int i, result = 1;
+    for (i = 0; i < n; ++i) {
+        if (tunic_abs_double(a[i] - b[i]) > tolerance) {
+            result = 0;
+        }
+    }
+    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    tunic_update_test_status(test_status);
+}
 
 /*
 ===============================================================================
