@@ -420,12 +420,7 @@ BOOLEAN
 */
 
 void tunic_ASSERT_bool(int assert, int a, int b){
-    if((assert == TRUE && a == b) || (assert == FALSE && a != b)){
-        tests_passed++;
-        tunic_update_test_status(1);
-    } else {
-        tunic_update_test_status(0);
-    }
+    tunic_ASSERT_int(assert, a, b); // Cheeky Breeky
 }
 
 /*
