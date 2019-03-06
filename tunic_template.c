@@ -260,6 +260,16 @@ void test_geq_double_array(void){
     tunic_GEQ_double_array(FALSE, d, e, 3); // Fail
 }
 
+void test_bool(void){
+    int a = TRUE;
+    int b = FALSE;
+    int c = TRUE;
+
+    tunic_ASSERT_bool(TRUE, a, b); // Fail
+    tunic_ASSERT_bool(FALSE, a, b); // Pass
+    tunic_ASSERT_bool(TRUE, a, c); // Pass
+}
+
 int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_assert_int, STD_OUTPUT);
     tunic_run_test_suite(test_assert_array_int, STD_OUTPUT);
@@ -285,5 +295,7 @@ int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_great_array_double, STD_OUTPUT);
     tunic_run_test_suite(test_geq_double, STD_OUTPUT);
     tunic_run_test_suite(test_geq_double_array, STD_OUTPUT);
+
+    tunic_run_test_suite(test_bool, STD_OUTPUT);
     return 0;
 }

@@ -92,6 +92,12 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
 
 
 /*
+    BOOLEAN
+*/
+
+void tunic_ASSERT_bool(int assert, int a, int b);
+
+/*
   The end of the header file!
 */
 #endif //tunic_H
@@ -405,6 +411,21 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
         test_status = 0;
     }
     tunic_update_test_status(test_status);
+}
+
+/*
+===============================================================================
+BOOLEAN
+===============================================================================
+*/
+
+void tunic_ASSERT_bool(int assert, int a, int b){
+    if((assert == TRUE && a == b) || (assert == FALSE && a != b)){
+        tests_passed++;
+        tunic_update_test_status(1);
+    } else {
+        tunic_update_test_status(0);
+    }
 }
 
 /*
