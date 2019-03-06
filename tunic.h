@@ -84,7 +84,18 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
 void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n);
 void tunic_GREAT_double_array(int assert, const double *a, const double *b, unsigned long n);
 
+/*
+    STRING
+ */
 
+void tunic_ASSERT_string(int assert, char * a, char * b);
+void tunic_ASSERT_string_array(int assert, char *a[], char *b[], unsigned int n);
+void tunic_WSP_string(int assert, char *a, char *b);
+void tunic_WSP_string_array(int assert, char *a[], char *b[], unsigned int n);
+void tunic_UPPER_string(int assert, char *a, char *b);
+void tunic_UPPER_string_array(int assert, char *a[], char *b[], unsigned int n);
+void tunic_LOWER_string(int assert, char *a, char *b);
+void tunic_LOWER_string_array(int assert, char *a[], char *b[], unsigned int n);
 /*
   The end of the header file!
 */
@@ -283,16 +294,17 @@ void tunic_LESS_double(int assert, double a, double b){
     tunic_update_test_status(test_status);
 }
 
-void tunic_LEQ_double(int assert, double a, double b){
+void tunic_LEQ_double(int assert, double a, double b) {
     double diff = a - b;
-    if((((tunic_abs_double(diff) <= tunic_dAccuracy) && (assert == TRUE)) || a < b) ||
-        (((tunic_abs_double(diff) > tunic_dAccuracy) && (assert == FALSE)) || a > b)){
+    if ((((tunic_abs_double(diff) <= tunic_dAccuracy) && (assert == TRUE)) || a < b) ||
+        (((tunic_abs_double(diff) > tunic_dAccuracy) && (assert == FALSE)) || a > b)) {
         tests_passed++;
         test_status = 1;
     } else {
         test_status = 0;
     }
     tunic_update_test_status(test_status);
+}
 
 void tunic_GREAT_double(int assert, double a, double b){
     tunic_LESS_double(1-assert, a, b); //Look at me being cheeky
@@ -371,6 +383,39 @@ void tunic_GREAT_double_array(int assert, const double *a, const double *b, unsi
     tunic_LESS_double_array(1-assert, a, b, n); //Cheeky me pt II.
 }
 
+/*
+===============================================================================
+STRING
+===============================================================================
+*/
+
+void tunic_ASSERT_string(int assert, char * a, char * b){
+    int result = strcmp(a, b);
+    if((result == 0 && assert == TRUE) || (result != 0 && assert == FALSE)){
+        tests_passed++;
+        test_status = 1;
+        tunic_update_test_status(test_status);
+    } else {
+        test_status = 0;
+        tunic_update_test_status(test_status);
+    }
+}
+
+void tunic_ASSERT_string_array(int assert, char *a[], char *b[], unsigned int n){
+    int i, temp, result = 1;
+    for (i = 0; i < n; ++i) {
+        temp = strcmp(a[i], b[i]);
+        if((temp != 0 && assert == TRUE) || (temp == 0 && assert == FALSE)){ //TODO: Something wrong here
+            result = 0;
+            break;
+        }
+    }
+    if(result == 1){
+        tests_passed++;
+    }
+    test_status = result;
+    tunic_update_test_status(test_status);
+}
 
 /*
 ===============================================================================

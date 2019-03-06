@@ -227,6 +227,28 @@ void test_great_array_double(void){
     tunic_GREAT_double_array(TRUE, c, d, 3); // Fail
 }
 
+void test_assert_string(void){
+    char a[] = "Potato";
+    char b[] = "PoTato";
+    char c[] = "Potato";
+
+    tunic_ASSERT_string(TRUE, a, b); // Fail
+    tunic_ASSERT_string(FALSE, a, b); // Pass
+    tunic_ASSERT_string(TRUE, a, c); // Pass
+    tunic_ASSERT_string(FALSE, a, c); // Fail
+}
+
+void test_assert_string_array(void){
+    char *a[] = {"Potato", "Tomato", "Dangle"};
+    char *b[] = {"potato", "tomatO", "Dangle"};
+    char *c[] = {"Potato", "Tomato", "Dangle"};
+
+    tunic_ASSERT_string_array(TRUE, a, b, 3); // Fail
+    tunic_ASSERT_string_array(FALSE, a, b, 3); // Pass
+    tunic_ASSERT_string_array(TRUE, a, c, 3); // Pass
+    tunic_ASSERT_string_array(FALSE, a, c, 3); // Fail
+}
+
 int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_assert_int, STD_OUTPUT);
     tunic_run_test_suite(test_assert_array_int, STD_OUTPUT);
@@ -250,5 +272,8 @@ int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_almost_array_double, STD_OUTPUT);
     tunic_run_test_suite(test_less_array_double, STD_OUTPUT);
     tunic_run_test_suite(test_great_array_double, STD_OUTPUT);
+
+    tunic_run_test_suite(test_assert_string, STD_OUTPUT);
+    tunic_run_test_suite(test_assert_string_array, STD_OUTPUT);
     return 0;
 }
