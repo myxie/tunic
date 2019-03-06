@@ -270,6 +270,20 @@ void test_bool(void){
     tunic_ASSERT_bool(TRUE, a, c); // Pass
 }
 
+void test_bool_array(void){
+    int a[] = {TRUE, FALSE, TRUE};
+    int b[] = {FALSE, TRUE, FALSE};
+    int c[] = {TRUE, FALSE, FALSE};
+    int d[] = {TRUE, FALSE, TRUE};
+
+    tunic_ASSERT_bool_array(TRUE, a, b, 3); // Fail
+    tunic_ASSERT_bool_array(FALSE, a, b, 3); // Pass
+    tunic_ASSERT_bool_array(TRUE, a, c, 3); // Fail
+    tunic_ASSERT_bool_array(FALSE, a, c, 3); // Pass
+    tunic_ASSERT_bool_array(TRUE, a, d, 3); // Pass
+    tunic_ASSERT_bool_array(FALSE, a, d, 3); // Fail
+}
+
 int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_assert_int, STD_OUTPUT);
     tunic_run_test_suite(test_assert_array_int, STD_OUTPUT);
@@ -297,5 +311,6 @@ int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_geq_double_array, STD_OUTPUT);
 
     tunic_run_test_suite(test_bool, STD_OUTPUT);
+    tunic_run_test_suite(test_bool_array, STD_OUTPUT);
     return 0;
 }
