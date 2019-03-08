@@ -59,6 +59,7 @@ enum tunic_output_level{
     INTEGER
 */
 void tunic_ASSERT_int(int assert, int a, int b);
+void tunic_ALMOST_int(int assert, int a, int b, int tolerance);
 void tunic_ASSERT_int_array(int assert, const int *a, const int *b, unsigned long n);
 void tunic_ALMOST_int_array(int assert, const int *a, const int *b, unsigned long n, int tolerance);
 
@@ -158,6 +159,24 @@ void tunic_ASSERT_int(int assert, int a, int b) {
     }
     else{
         test_status = 0;
+    }
+    tunic_update_test_status(test_status);
+}
+
+void tunic_ALMOST_int(int assert, int a, int b, int tolerance){
+    test_status = 1;
+
+    if(assert == TRUE){
+        if(tunic_abs_int(a-b) > tunic_abs_int(tolerance)){
+            test_status = 0;
+        } else {
+            tests_passed++;
+        }
+    } else {
+        if(tunic_abs_int(a-b) >= tunic_abs_int(tolerance)){
+            test_status = 0;
+            tests_passed++;
+        }
     }
     tunic_update_test_status(test_status);
 }

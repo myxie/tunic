@@ -40,6 +40,17 @@ void test_assert_int(void){
     tunic_ASSERT_int(FALSE, x, z); // Pass
 }
 
+void test_almost_int(void) {
+    int x = 1;
+    int y = 1;
+    int z = 0;
+
+    tunic_ALMOST_int(TRUE, x, y, 0); // Pass
+    tunic_ALMOST_int(TRUE, x, z, 0); // Fail
+    tunic_ALMOST_int(FALSE, x, y, 0); // Fail
+    tunic_ALMOST_int(TRUE, x, z, 1); // Pass
+}
+
 void test_assert_array_int(void) {
     int a[] = {1,2,3,4,5};
     int b[] = {1,2,3,4,5};
@@ -250,5 +261,7 @@ int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_almost_array_double, STD_OUTPUT);
     tunic_run_test_suite(test_less_array_double, STD_OUTPUT);
     tunic_run_test_suite(test_great_array_double, STD_OUTPUT);
+
+    tunic_run_test_suite(test_almost_int, STD_OUTPUT);
     return 0;
 }
