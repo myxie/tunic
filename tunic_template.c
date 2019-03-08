@@ -135,6 +135,17 @@ void test_assert_double(void) {
     tunic_ASSERT_double(FALSE, x, z); // Pass
 }
 
+void test_almost_double(void){
+    double x = 1e-8;
+    double y = 1e-8;
+    double z = 2e-6;
+
+    tunic_ALMOST_double(TRUE, x, y, 1e-7); // Pass
+    tunic_ALMOST_double(FALSE, x, y, 1e-8); // Fail
+    tunic_ALMOST_double(FALSE, x, z, 1e-8); // Pass
+    tunic_ALMOST_double(TRUE, x, z, 1e-8); // Fail
+}
+
 void test_less_double(void){
     double x = 1.0;
     double y = 2.0;
@@ -275,5 +286,6 @@ int main(int argc, char *argv[]) {
 
     tunic_run_test_suite(test_almost_int, STD_OUTPUT);
     tunic_run_test_suite(test_almost_float, STD_OUTPUT);
+    tunic_run_test_suite(test_almost_double, STD_OUTPUT);
     return 0;
 }
