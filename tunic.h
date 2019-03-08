@@ -268,7 +268,6 @@ void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsign
     tunic_update_test_status(test_status);
 }
 
-//TODO: handle negative tolerance case
 void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
