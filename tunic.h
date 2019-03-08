@@ -68,6 +68,7 @@ void tunic_ALMOST_int_array(int assert, const int *a, const int *b, unsigned lon
 */
 
 void tunic_ASSERT_float(int assert, float a, float b);
+void tunic_ALMOST_float(int assert, float a, float b, float tolerance);
 void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n);
 void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance);
 
@@ -237,6 +238,19 @@ void tunic_ASSERT_float(int assert, float a, float b) {
     tunic_update_test_status(test_status);
 }
 
+void tunic_ALMOST_float(int assert, float a, float b, float tolerance){
+    test_status = 1;
+
+    if(tunic_abs_float(a-b) > tunic_abs_float(tolerance)){
+        test_status = 0;
+    }
+
+    if((test_status == 1 && assert == TRUE) || (test_status == 0 && assert == FALSE)){
+        tests_passed++;
+    }
+    tunic_update_test_status(test_status);
+}
+
 void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsigned long n) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
@@ -259,7 +273,7 @@ void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsign
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (tunic_abs_float(a[i] - b[i]) > tolerance) {
+        if (tunic_abs_float(a[i] - b[i]) > tunic_abs_float(tolerance)) {
             result = 0;
             break;
         }

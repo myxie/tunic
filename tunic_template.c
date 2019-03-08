@@ -86,6 +86,17 @@ void test_assert_float(void) {
     tunic_ASSERT_float(FALSE, x, z); // Pass
 }
 
+void test_almost_float(void){
+    float x = 0.0;
+    float y = 1.0;
+    float z = 0.1;
+
+    tunic_ALMOST_float(TRUE, x, y, 1.0); // Pass
+    tunic_ALMOST_float(FALSE, x, y, 1.0); // Pass
+    tunic_ALMOST_float(TRUE, x, z, 0.05); // Fail
+    tunic_ALMOST_float(FALSE, x, z, 0.05); // Fail
+}
+
 void test_assert_array_float(void) {
     float a[] = {0.0, 0.1, 0.2};
     float b[] = {0.0, 0.1, 0.2};
@@ -263,5 +274,6 @@ int main(int argc, char *argv[]) {
     tunic_run_test_suite(test_great_array_double, STD_OUTPUT);
 
     tunic_run_test_suite(test_almost_int, STD_OUTPUT);
+    tunic_run_test_suite(test_almost_float, STD_OUTPUT);
     return 0;
 }
