@@ -83,6 +83,13 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
 
 
 /*
+    BOOLEAN
+*/
+
+void tunic_ASSERT_bool(int assert, int a, int b);
+void tunic_ASSERT_bool_array(int assert, const int *a, const int *b, unsigned int n);
+
+/*
   The end of the header file!
 */
 #endif //tunic_H
@@ -300,29 +307,18 @@ void tunic_ASSERT_double(int assert, double a, double b){
     tunic_update_test_status(test_status);
 }
 
-void tunic_ALMOST_double(int assert, double a, double b, double tolerance){
-    test_status = 1;
-
-    if(assert == TRUE){ //Looking for difference > tolerance to fail
-        if(tunic_abs_double(a-b) > tunic_abs_double(tolerance)){
-            test_status = 0;
-        }
-    } else { // Looking for the opposite
-        if(tunic_abs_double(a-b) < tunic_abs_double(tolerance)){
-            test_status = 0;
-        }
-    }
 
     if((test_status == 1 && assert == TRUE) || (test_status == 0 && assert == FALSE)){
         tests_passed++;
     }
+
     tunic_update_test_status(test_status);
 }
 
-void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n) {
+void tunic_LEQ_double_array(int assert, const double *a, const double *b, unsigned long n){
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (tunic_abs_double(a[i] - b[i]) > tunic_dAccuracy) {
+        if ((a[i] - b[i]) > 0.0) {
             result = 0;
         }
     }
@@ -332,13 +328,34 @@ void tunic_ASSERT_double_array(int assert, const double *a, const double *b, uns
     } else {
         test_status = 0;
     }
+
     tunic_update_test_status(test_status);
 }
 
-void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
+void tunic_GREAT_double(int assert, double a, double b){
+    tunic_LESS_double(1-assert, a, b); //Look at me being cheeky
+}
+
+void tunic_GREAT_double_array(int assert, const double *a, const double *b, unsigned long n){
+    tunic_LESS_double_array(1-assert, a, b, n); //Cheeky me pt II.
+}
+
+void tunic_GEQ_double(int assert, double a, double b){
+    double diff = a - b;
+    if ((((tunic_abs_double(diff) <= tunic_dAccuracy) && (assert == TRUE)) || a > b) ||
+        (((tunic_abs_double(diff) > tunic_dAccuracy) && (assert == FALSE)) || a < b)) {
+        tests_passed++;
+        test_status = 1;
+    } else {
+        test_status = 0;
+    }
+    tunic_update_test_status(test_status);
+}
+
+void tunic_GEQ_double_array(int assert, const double *a, const double *b, unsigned long n){
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (tunic_abs_double(a[i] - b[i]) > tolerance) {
+        if ((a[i] - b[i]) < 0.0) {
             result = 0;
         }
     }
@@ -348,6 +365,7 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
     } else {
         test_status = 0;
     }
+
     tunic_update_test_status(test_status);
 }
 
