@@ -79,8 +79,14 @@ void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsign
 void tunic_ASSERT_double(int assert, double a, double b);
 void tunic_ALMOST_double(int assert, double a, double b, double tolerance);
 void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
-void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
 
+
+/*
+    BOOLEAN
+*/
+
+void tunic_ASSERT_bool(int assert, int a, int b);
+void tunic_ASSERT_bool_array(int assert, const int *a, const int *b, unsigned int n);
 
 /*
   The end of the header file!
@@ -316,6 +322,7 @@ void tunic_ALMOST_double(int assert, double a, double b, double tolerance){
     if((test_status == 1 && assert == TRUE) || (test_status == 0 && assert == FALSE)){
         tests_passed++;
     }
+
     tunic_update_test_status(test_status);
 }
 
@@ -332,8 +339,12 @@ void tunic_ASSERT_double_array(int assert, const double *a, const double *b, uns
     } else {
         test_status = 0;
     }
+
     tunic_update_test_status(test_status);
 }
+
+
+
 
 void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance){
     int i, result = 1;
@@ -350,8 +361,6 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
     }
     tunic_update_test_status(test_status);
 }
-
-
 /*
 ===============================================================================
 TIME
