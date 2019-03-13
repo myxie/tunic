@@ -173,6 +173,30 @@ void test_almost_array_double(void){
     tunic_ALMOST_double_array(FALSE, a, d, 3, 1e-8); // Pass
 }
 
+void test_boolean(void){
+    int a = TRUE;
+    int b = FALSE;
+    int c = TRUE;
+
+    tunic_ASSERT_bool(TRUE, a, b); // Fail
+    tunic_ASSERT_bool(FALSE, a, b); // Pass
+    tunic_ASSERT_bool(TRUE, a, c); // Pass
+    tunic_ASSERT_bool(FALSE, a, c); // Fail
+}
+
+void test_boolean_array(void){
+    int a[] = {TRUE, TRUE, TRUE, TRUE, TRUE};
+    int b[] = {TRUE, TRUE, TRUE, TRUE, TRUE};
+    int c[] = {TRUE, TRUE, TRUE, TRUE, FALSE};
+
+    tunic_ALMOST_int_array(TRUE, a, b, 5, 1); // Pass
+    tunic_ALMOST_int_array(TRUE, a, c, 5, 0); // Fail
+    tunic_ALMOST_int_array(FALSE, a, b, 5, 1); // Fail
+    tunic_ALMOST_int_array(FALSE, a, c, 5, 0); // Pass
+    tunic_ALMOST_int_array(TRUE, a, c, 5, 2); // Pass
+    tunic_ALMOST_int_array(FALSE, a, c, 5, 2); // Fail
+}
+
 void main(int argc, char *argv[]) {
     tunic_run_test_suite(test_assert_int, STD_OUTPUT);
     tunic_run_test_suite(test_almost_int, STD_OUTPUT);
@@ -189,5 +213,7 @@ void main(int argc, char *argv[]) {
     tunic_run_test_suite(test_assert_array_double, STD_OUTPUT);
     tunic_run_test_suite(test_almost_array_double, STD_OUTPUT);
 
+    tunic_run_test_suite(test_boolean, STD_OUTPUT);
+    tunic_run_test_suite(test_boolean_array, STD_OUTPUT);
     // return 0;
 }
