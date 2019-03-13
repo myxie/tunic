@@ -189,12 +189,12 @@ void test_boolean_array(void){
     int b[] = {TRUE, TRUE, TRUE, TRUE, TRUE};
     int c[] = {TRUE, TRUE, TRUE, TRUE, FALSE};
 
-    tunic_ALMOST_int_array(TRUE, a, b, 5, 1); // Pass
-    tunic_ALMOST_int_array(TRUE, a, c, 5, 0); // Fail
-    tunic_ALMOST_int_array(FALSE, a, b, 5, 1); // Fail
-    tunic_ALMOST_int_array(FALSE, a, c, 5, 0); // Pass
-    tunic_ALMOST_int_array(TRUE, a, c, 5, 2); // Pass
-    tunic_ALMOST_int_array(FALSE, a, c, 5, 2); // Fail
+    tunic_ASSERT_bool_array(TRUE, a, b, 5); // Pass
+    tunic_ASSERT_bool_array(TRUE, a, c, 5); // Fail
+    tunic_ASSERT_bool_array(FALSE, a, b, 5); // Fail
+    tunic_ASSERT_bool_array(FALSE, a, c, 5); // Pass
+    tunic_ASSERT_bool_array(TRUE, a, c, 5); // Pass
+    tunic_ASSERT_bool_array(FALSE, a, c, 5); // Fail
 }
 
 void main(int argc, char *argv[]) {
