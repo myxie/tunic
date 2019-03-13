@@ -361,6 +361,20 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
     }
     tunic_update_test_status(test_status);
 }
+
+/*
+===============================================================================
+BOOLEANS
+===============================================================================
+ */
+void tunic_ASSERT_bool(int assert, int a, int b){
+    tunic_ASSERT_int(assert, a, b);
+}
+
+void tunic_ASSERT_bool_array(int assert, const int *a, const int *b, unsigned int n){
+    tunic_ASSERT_int_array(assert, a, b, n);
+}
+
 /*
 ===============================================================================
 TIME
