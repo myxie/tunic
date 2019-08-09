@@ -75,15 +75,16 @@ void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsign
 */
 
 void tunic_ASSERT_double(int assert, double a, double b);
-void tunic_LESS_double(int assert, double a, double b);
-void tunic_LEQ_double(int assert, double a, double b);
-void tunic_LEQ_double_array(int assert, const double *a, const double *b, unsigned long n);
-void tunic_GREAT_double(int assert, double a, double b);
+void tunic_ALMOST_double(int assert, double a, double b, double tolerance);
 void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n);
-void tunic_ALMOST_double_array(int assert, const double *a, const double *b, unsigned long n, double tolerance);
-void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n);
-void tunic_GREAT_double_array(int assert, const double *a, const double *b, unsigned long n);
 
+
+/*
+    BOOLEAN
+*/
+
+void tunic_ASSERT_bool(int assert, int a, int b);
+void tunic_ASSERT_bool_array(int assert, const int *a, const int *b, unsigned int n);
 /*
     STRING
  */
@@ -246,12 +247,11 @@ void tunic_ASSERT_float_array(int assert, const float *a, const float *b, unsign
     tunic_update_test_status(test_status);
 }
 
-//TODO: handle negative tolerance case
 void tunic_ALMOST_float_array(int assert, const float *a, const float *b, unsigned long n, float tolerance) {
     //Moving away from memcmp test for floating point values
     int i, result = 1;
     for (i = 0; i < n; ++i) {
-        if (tunic_abs_float(a[i] - b[i]) > tolerance) {
+        if (tunic_abs_float(a[i] - b[i]) > tunic_abs_float(tolerance)) {
             result = 0;
             break;
         }
@@ -284,30 +284,24 @@ void tunic_ASSERT_double(int assert, double a, double b){
     tunic_update_test_status(test_status);
 }
 
-void tunic_LESS_double(int assert, double a, double b){
-    if((assert == TRUE && a < b) || (assert == FALSE && a > b)){
-        tests_passed++;
-        test_status = 1;
-    } else{
-        test_status = 0;
-    };
-    tunic_update_test_status(test_status);
-}
+void tunic_ALMOST_double(int assert, double a, double b, double tolerance){
+    test_status = 1;
 
-void tunic_LEQ_double(int assert, double a, double b) {
-    double diff = a - b;
-    if ((((tunic_abs_double(diff) <= tunic_dAccuracy) && (assert == TRUE)) || a < b) ||
-        (((tunic_abs_double(diff) > tunic_dAccuracy) && (assert == FALSE)) || a > b)) {
-        tests_passed++;
-        test_status = 1;
-    } else {
-        test_status = 0;
+    if(assert == TRUE){ //Looking for difference > tolerance to fail
+        if(tunic_abs_double(a-b) > tunic_abs_double(tolerance)){
+            test_status = 0;
+        }
+    } else { // Looking for the opposite
+        if(tunic_abs_double(a-b) < tunic_abs_double(tolerance)){
+            test_status = 0;
+        }
     }
-    tunic_update_test_status(test_status);
-}
 
-void tunic_GREAT_double(int assert, double a, double b){
-    tunic_LESS_double(1-assert, a, b); //Look at me being cheeky
+    if((test_status == 1 && assert == TRUE) || (test_status == 0 && assert == FALSE)){
+        tests_passed++;
+    }
+
+    tunic_update_test_status(test_status);
 }
 
 void tunic_ASSERT_double_array(int assert, const double *a, const double *b, unsigned long n) {
@@ -323,6 +317,7 @@ void tunic_ASSERT_double_array(int assert, const double *a, const double *b, uns
     } else {
         test_status = 0;
     }
+
     tunic_update_test_status(test_status);
 }
 
@@ -343,46 +338,17 @@ void tunic_ALMOST_double_array(int assert, const double *a, const double *b, uns
 }
 
 /*
- * Asserts a[i] < b[i] for 0 <= i < n
+===============================================================================
+BOOLEANS
+===============================================================================
  */
-void tunic_LESS_double_array(int assert, const double *a, const double *b, unsigned long n){
-    int i, result = 1;
-    for (i = 0; i < n; ++i) {
-        if ((a[i] - b[i]) > tunic_dAccuracy) { //TODO: Check this logic, I might be missing the other edge case
-            result = 0;
-        }
-    }
-    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
-        tests_passed++;
-        test_status = 1;
-    } else {
-        test_status = 0;
-    }
-
-    tunic_update_test_status(test_status);
+void tunic_ASSERT_bool(int assert, int a, int b){
+    tunic_ASSERT_int(assert, a, b);
 }
 
-void tunic_LEQ_double_array(int assert, const double *a, const double *b, unsigned long n){
-    int i, result = 1;
-    for (i = 0; i < n; ++i) {
-        if ((a[i] - b[i]) > 0.0) {
-            result = 0;
-        }
-    }
-    if ((result == 1 && assert == TRUE) || (result == 0 && assert == FALSE)) {
-        tests_passed++;
-        test_status = 1;
-    } else {
-        test_status = 0;
-    }
-
-    tunic_update_test_status(test_status);
+void tunic_ASSERT_bool_array(int assert, const int *a, const int *b, unsigned int n){
+    tunic_ASSERT_int_array(assert, a, b, n);
 }
-
-void tunic_GREAT_double_array(int assert, const double *a, const double *b, unsigned long n){
-    tunic_LESS_double_array(1-assert, a, b, n); //Cheeky me pt II.
-}
-
 /*
 ===============================================================================
 STRING
