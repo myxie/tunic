@@ -3,3 +3,4 @@
 *.iml
 CMakeLists.txt
 tunic
+cmake-build-debug/*

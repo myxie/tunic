@@ -413,7 +413,7 @@ void tunic_close(void){
 }
 
 
-void tunic_update_test_status(int test_status){
+void tunic_update_test_status(int status){
     tests_run++;
     if(test_status > 0){
         printf("Test %d passed\n", tests_run);

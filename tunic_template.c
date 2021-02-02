@@ -19,7 +19,7 @@ Copyright (C) 2018 RW Bunney, N Pritchard
 
 #include "tunic.h"
 /*
-If you want to use timing functionalities for linux, use the following definition:
+If you want to use timing functionality for linux, use the following definition:
 */
 #define TIME_TESTS
 
